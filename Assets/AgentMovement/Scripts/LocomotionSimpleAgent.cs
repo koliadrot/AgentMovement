@@ -14,8 +14,6 @@ namespace AgentMovement
         [SerializeField]
         private float offsetAgentPosition = 0.9f;
         [SerializeField]
-        private bool isStrafe;
-        [SerializeField]
         private HeadLookAt lookAt;
 
         private Animator anim;
@@ -50,7 +48,6 @@ namespace AgentMovement
         {
             Locomotion();
             LookAtToTarget();
-            Strafe();
         }
 
         private void OnAnimatorMove() => UpdateAgent();
@@ -87,15 +84,6 @@ namespace AgentMovement
             if (lookAt)
             {
                 lookAt.LookAtTargetPosition = agent.steeringTarget + transform.forward;
-            }
-        }
-
-        //TODO:возможно стоит вынести в другой класс
-        private void Strafe()
-        {
-            if (isStrafe)
-            {
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0f, transform.eulerAngles.z);
             }
         }
 

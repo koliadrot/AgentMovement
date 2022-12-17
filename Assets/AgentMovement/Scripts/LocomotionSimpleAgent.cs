@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
-
-namespace AgentMovement
+﻿namespace AgentMovement
 {
+    using UnityEngine;
+    using UnityEngine.AI;
+
     /// <summary>
     /// Перемещение объекта с аниматоров за агентом
     /// </summary>
@@ -13,18 +13,16 @@ namespace AgentMovement
         private float speed = 1f;
         [SerializeField]
         private float offsetAgentPosition = 0.9f;
-        [SerializeField]
-        private HeadLookAt lookAt;
 
-        private Animator anim;
-        private NavMeshAgent agent;
+        private Animator anim = default;
+        private NavMeshAgent agent = default;
         private Vector2 smoothDeltaPosition = Vector2.zero;
         private Vector2 velocity = Vector2.zero;
         private Vector2 deltaPosition = Vector2.zero;
         private Vector3 worldDeltaPosition = Vector2.zero;
         private Vector3 rootPosition = Vector2.zero;
-        private float smooth;
-        private bool shouldMove;
+        private float smooth = default;
+        private bool isCanMove = default;
 
         private const float MIN_MOVE_DISTANCE = 0.5f;
         private const float MIN_SMOOTH = 1f;
@@ -44,11 +42,7 @@ namespace AgentMovement
             agent.speed = speed;
         }
 
-        private void FixedUpdate()
-        {
-            Locomotion();
-            LookAtToTarget();
-        }
+        private void FixedUpdate() => Locomotion();
 
         private void OnAnimatorMove() => UpdateAgent();
 
@@ -67,11 +61,9 @@ namespace AgentMovement
                 velocity = smoothDeltaPosition / Time.deltaTime;
             }
 
-            shouldMove = velocity.magnitude > MIN_MOVE_DISTANCE && agent.remainingDistance > agent.radius;
+            isCanMove = velocity.magnitude > MIN_MOVE_DISTANCE && agent.remainingDistance > agent.radius;
 
-            anim.SetBool(MOVE, shouldMove);
-            anim.SetFloat(VELOCITY_X, velocity.x);
-            anim.SetFloat(VELOCITY_Y, velocity.y);
+            AnimatorMovement();
 
             if (worldDeltaPosition.magnitude > agent.radius)
             {
@@ -79,12 +71,11 @@ namespace AgentMovement
             }
         }
 
-        private void LookAtToTarget()
+        private void AnimatorMovement()
         {
-            if (lookAt)
-            {
-                lookAt.LookAtTargetPosition = agent.steeringTarget + transform.forward;
-            }
+            anim.SetBool(MOVE, isCanMove);
+            anim.SetFloat(VELOCITY_X, velocity.x);
+            anim.SetFloat(VELOCITY_Y, velocity.y);
         }
 
         private void UpdateAgent()

@@ -1,13 +1,14 @@
-﻿using UnityEngine;
-
-namespace AgentMovement
+﻿namespace AgentMovement
 {
+    using UnityEngine;
+
     /// <summary>
     /// Тип движения "strafe"
     /// </summary>
     public class Strafe : MonoBehaviour
     {
-        private bool isStrafe;
+        private bool isStrafe = default;
+        private float strafeVerticalRotation = default;
 
         private void Update()
         {
@@ -23,7 +24,11 @@ namespace AgentMovement
         {
             if (isStrafe)
             {
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0f, transform.eulerAngles.z);
+                transform.eulerAngles = new Vector3(transform.eulerAngles.x, strafeVerticalRotation, transform.eulerAngles.z);
+            }
+            else
+            {
+                strafeVerticalRotation = transform.eulerAngles.y;
             }
         }
     }

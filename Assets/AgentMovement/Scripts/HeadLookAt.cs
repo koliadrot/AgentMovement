@@ -1,12 +1,13 @@
-﻿using System;
-using UnityEngine;
-
-namespace AgentMovement
+﻿namespace AgentMovement
 {
+    using System;
+    using UnityEngine;
+    using UnityEngine.AI;
+
     /// <summary>
     /// Корректирует анимацию головы при перемещении
     /// </summary>
-    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Animator), typeof(NavMeshAgent))]
     public class HeadLookAt : MonoBehaviour
     {
         [NonSerialized]
@@ -21,13 +22,14 @@ namespace AgentMovement
         [SerializeField]
         private bool looking = true;
 
-        private Vector3 lookAtPosition;
-        private Vector3 currentDirection;
-        private Vector3 futureDirection;
-        private Animator anim;
-        private float lookAtWeight = 0.0f;
-        private float lookAtTargetWeight = 0.0f;
-        private float blendTime = 0.0f;
+        private Vector3 lookAtPosition = default;
+        private Vector3 currentDirection = default;
+        private Vector3 futureDirection = default;
+        private Animator anim = default;
+        private float lookAtWeight = default;
+        private float lookAtTargetWeight = default;
+        private float blendTime = default;
+        private NavMeshAgent agent = default;
 
         private void Start()
         {
@@ -37,10 +39,13 @@ namespace AgentMovement
                 enabled = false;
                 return;
             }
+            agent = GetComponent<NavMeshAgent>();
             anim = GetComponent<Animator>();
             LookAtTargetPosition = head.position + transform.forward;
             lookAtPosition = LookAtTargetPosition;
         }
+
+        private void FixedUpdate() => LookAtToTarget();
 
         private void OnAnimatorIK()
         {
@@ -58,6 +63,8 @@ namespace AgentMovement
             anim.SetLookAtWeight(lookAtWeight, 0.2f, 0.5f, 0.7f, 0.5f);
             anim.SetLookAtPosition(lookAtPosition);
         }
+
+        private void LookAtToTarget() => LookAtTargetPosition = agent.steeringTarget + transform.forward;
     }
 
 }

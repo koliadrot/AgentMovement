@@ -1,21 +1,26 @@
-﻿using UnityEngine;
-using UnityEngine.AI;
-
-namespace AgentMovement
+﻿namespace AgentMovement
 {
+    using UnityEngine;
+    using UnityEngine.AI;
+
     /// <summary>
     /// Абстрактная реализация движения
     /// </summary>
     //TODO:Добавить обертку Input
-    [RequireComponent(typeof(LocomotionSimpleAgent))]
+    [RequireComponent(typeof(NavMeshAgent))]
     public abstract class AbstractMovement : MonoBehaviour
     {
-        protected NavMeshAgent agent;
-        protected CameraMark cameraMark;
+        protected NavMeshAgent agent = default;
+        protected CameraMark cameraMark = default;
+
         protected virtual void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
             cameraMark = FindObjectOfType<CameraMark>();
+            if (cameraMark == null)
+            {
+                Debug.LogError($"Не найдена метка {nameof(CameraMark)} для камеры");
+            }
         }
 
         /// <summary>

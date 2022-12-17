@@ -1,14 +1,14 @@
-﻿using UnityEngine;
-
-namespace AgentMovement
+﻿namespace AgentMovement
 {
+    using UnityEngine;
+
     /// <summary>
     /// Перемещение top-down
     /// </summary>
     public class TopPersonMovement : AbstractMovement
     {
         private RaycastHit hitInfo = new RaycastHit();
-        private Ray ray;
+        private Ray ray = default;
 
         protected override void Movement()
         {

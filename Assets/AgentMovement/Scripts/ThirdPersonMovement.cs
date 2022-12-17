@@ -1,17 +1,17 @@
-﻿using UnityEngine;
-
-namespace AgentMovement
+﻿namespace AgentMovement
 {
+    using UnityEngine;
+
     /// <summary>
     /// Перемещение от 3-го лица
     /// </summary>
     public class ThirdPersonMovement : AbstractMovement
     {
-        private Vector3 inputDirection;
-        private Vector3 targetDirection;
-        private float targetRotation;
-        private float vertical;
-        private float horizontal;
+        private Vector3 inputDirection = new Vector3();
+        private Vector3 targetDirection = new Vector3();
+        private float targetRotation = default;
+        private float vertical = default;
+        private float horizontal = default;
 
         private const string VERTICAL = "Vertical";
         private const string HORIZONTAL = "Horizontal";
